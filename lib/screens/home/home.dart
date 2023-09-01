@@ -2,6 +2,7 @@ import 'package:attendenceapp/screens/home/all_days.dart';
 import 'package:attendenceapp/screens/home/one_day_detail.dart';
 import 'package:attendenceapp/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,9 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: size.height / 150,
                 ),
-                const Text(
-                  'Today: 13 August 2023',
-                  style: TextStyle(
+                Text(
+                  'Today: ${DateFormat("dd MMMM yyyy").format(DateTime.now())}',
+                  style: const TextStyle(
                     fontSize: 12,
                     fontFamily: "Work Sans",
                     fontWeight: FontWeight.w500,

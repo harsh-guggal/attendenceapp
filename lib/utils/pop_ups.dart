@@ -1,5 +1,6 @@
 import 'package:attendenceapp/screens/auth_flow/welcome_screen.dart';
 import 'package:attendenceapp/services/auth_services.dart';
+import 'package:attendenceapp/utils/alerts.dart';
 import 'package:attendenceapp/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -253,6 +254,9 @@ Future showSignOutPopUp(BuildContext context) {
                       child: InkWell(
                         onTap: () async {
                           await AuthServices.logout();
+                          // ignore: use_build_context_synchronously
+                          showSuccessNoti(
+                              context, 'Authentication', 'Logout successfully');
                           // ignore: use_build_context_synchronously
                           Navigator.pushAndRemoveUntil(
                               context,

@@ -31,11 +31,13 @@ dependencies:
   calendar_date_picker2: ^0.5.3
   cloud_firestore: ^4.9.0
   cupertino_icons: ^1.0.2
+  elegant_notification: ^1.11.0
   firebase_auth: ^4.8.0
   firebase_core: ^2.15.1
   firebase_storage: ^11.2.6
   flutter:
     sdk: flutter
+  image_picker: ^1.0.4
   intl: ^0.18.1
   shared_preferences: ^2.2.0
 

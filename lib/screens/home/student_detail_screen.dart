@@ -1,9 +1,11 @@
+import 'package:attendenceapp/models/student_model.dart';
 import 'package:attendenceapp/utils/colors.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 
 class StudentDetailScreen extends StatefulWidget {
-  const StudentDetailScreen({super.key});
+  const StudentDetailScreen({super.key, required this.student});
+  final Student student;
 
   @override
   State<StudentDetailScreen> createState() => _StudentDetailScreenState();
@@ -71,9 +73,9 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                       SizedBox(
                         height: size.height / 100,
                       ),
-                      const Text(
-                        "Harsh Kamboj",
-                        style: TextStyle(
+                      Text(
+                        widget.student.name!,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontFamily: "Work Sans",
                           fontWeight: FontWeight.w600,
@@ -85,7 +87,7 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                       Row(
                         children: [
                           Text(
-                            'Class: 10th',
+                            'Class: ${widget.student.studentClass}',
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: "Work Sans",
@@ -97,7 +99,7 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                             width: 8,
                           ),
                           Text(
-                            'Fees: ₹500',
+                            'Fees: ₹${widget.student.fees}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -143,9 +145,9 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '+91 9813433176',
-                      style: TextStyle(
+                    Text(
+                      '+91 ${widget.student.contactNumber}',
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         fontFamily: "Work Sans",
@@ -186,7 +188,7 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                       ),
                     ),
                     Text(
-                      "24 August 2023",
+                      widget.student.joiningDate!,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,

@@ -1,6 +1,7 @@
 import 'package:attendenceapp/screens/home/one_day_detail.dart';
 import 'package:attendenceapp/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AllDaysScreen extends StatefulWidget {
   const AllDaysScreen({super.key});
@@ -41,7 +42,11 @@ class _AllDaysScreenState extends State<AllDaysScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const OneDayDetail(),
+                      builder: (context) => OneDayDetail(
+                        date: DateFormat("dd MMMM yyyy").format(
+                          DateTime.now(),
+                        ),
+                      ),
                     ),
                   );
                 },

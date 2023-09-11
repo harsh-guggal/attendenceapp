@@ -11,31 +11,38 @@ String teacherToJson(Teacher data) => json.encode(data.toJson());
 class Teacher {
   String? uid;
   String? password;
+  String? imageId;
+  List<String>? students;
   String? email;
   String? username;
-  String? imageId;
 
   Teacher({
     this.uid,
     this.password,
+    this.imageId,
+    this.students,
     this.email,
     this.username,
-    this.imageId,
   });
 
   factory Teacher.fromJson(Map<String, dynamic> json) => Teacher(
         uid: json["uid"],
         password: json["password"],
+        imageId: json["imageId"],
+        students: json["students"] == null
+            ? []
+            : List<String>.from(json["students"]!.map((x) => x)),
         email: json["email"],
         username: json["username"],
-        imageId: json["imageId"],
       );
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
         "password": password,
+        "imageId": imageId,
+        "students":
+            students == null ? [] : List<dynamic>.from(students!.map((x) => x)),
         "email": email,
         "username": username,
-        "imageId": imageId,
       };
 }

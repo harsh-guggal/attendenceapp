@@ -1,6 +1,8 @@
+import 'package:attendenceapp/utils/alerts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class AuthServices {
   static Future<bool> createUser(
@@ -34,6 +36,7 @@ class AuthServices {
       "username": username,
       "email": email,
       "password": password,
+      "imageId": "null",
     };
     await FirebaseFirestore.instance
         .collection('teachers')
@@ -74,5 +77,24 @@ class AuthServices {
 
   static Future logout() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  static Future createStudent(
+      Map<String, dynamic> data, BuildContext context) async {
+    await FirebaseFirestore.instance
+        .collection('students')
+        .doc(data['uid'])
+        .set(data)
+        .then((value) {
+      if (kDebugMode) {
+        showSuccessNoti(context, 'Student', 'student added successfully');
+        print('<------------------student in created in firestore----------->');
+      }
+    }).onError((error, stackTrace) {
+      if (kDebugMode) {
+        print(
+            '<------------------error in creating student in firestore-----------> ${error.toString()}');
+      }
+    });
   }
 }

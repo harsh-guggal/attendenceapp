@@ -1,8 +1,14 @@
+import 'package:attendenceapp/models/student_model.dart';
+import 'package:attendenceapp/models/teacher_model.dart';
+import 'package:attendenceapp/services/auth_services.dart';
+import 'package:attendenceapp/services/user_services.dart';
+import 'package:attendenceapp/utils/alerts.dart';
 import 'package:attendenceapp/utils/colors.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class AddStudent extends StatefulWidget {
   const AddStudent({super.key, required this.isEdit});
@@ -13,18 +19,44 @@ class AddStudent extends StatefulWidget {
 }
 
 class _AddStudentState extends State<AddStudent> {
+  Teacher teacher = Teacher();
   List<DateTime?> _dateRange = [];
   // Initial Selected Value
-  String dropdownvalue = 'Class 1';
+  String dropdownvalue = '1st';
 
   // List of items in our dropdown menu
   var items = [
-    'Class 1',
-    'Class 2',
-    'Class 3',
-    'Class 4',
-    'Class 5',
+    '1st',
+    '2nd',
+    '3rd',
+    '4rth',
+    '5th',
+    '6th',
+    '7th',
+    '8th',
+    '9th',
+    '10th',
   ];
+
+  TextEditingController nameController = TextEditingController();
+
+  TextEditingController feesController = TextEditingController();
+
+  TextEditingController numberController = TextEditingController();
+  bool isButtonLoading = false;
+
+  getData() async {
+    String id = await UserServices.getCurrentTeacherId();
+    teacher = await UserServices.fetchTeacherById(id);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -101,6 +133,7 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                     width: size.width,
                     child: TextFormField(
+                      controller: nameController,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         enabledBorder: InputBorder.none,
@@ -220,6 +253,7 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                     width: size.width,
                     child: TextFormField(
+                      controller: feesController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         enabledBorder: InputBorder.none,
@@ -335,6 +369,7 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                     width: size.width,
                     child: TextFormField(
+                      controller: numberController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         enabledBorder: InputBorder.none,
@@ -355,35 +390,106 @@ class _AddStudentState extends State<AddStudent> {
             const SizedBox(
               height: 12,
             ),
-            Container(
-              width: size.width,
-              height: size.height / 15,
-              margin: EdgeInsets.symmetric(
-                horizontal: size.width / 10,
-              ),
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    BrandColors.darkBlueColor,
-                  ),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+            isButtonLoading
+                ? SizedBox(
+                    width: size.width,
+                    height: 50,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: BrandColors.darkBlueColor,
+                      ),
+                    ),
+                  )
+                : Container(
+                    width: size.width,
+                    height: size.height / 15,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: size.width / 10,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          isButtonLoading = true;
+                        });
+                        if (widget.isEdit) {
+                          // edit
+                        } else {
+                          // add
+                          var student = await UserServices.fetchStudentByname(
+                              nameController.text);
+                          if (student.uid == null) {
+                            if (nameController.text.isNotEmpty &&
+                                feesController.text.isNotEmpty &&
+                                _dateRange.isNotEmpty &&
+                                numberController.text.length == 10) {
+                              String uid = const Uuid().v4();
+                              Map<String, dynamic> data = {
+                                'uid': uid,
+                                'name': nameController.text,
+                                'class': dropdownvalue,
+                                'fees': feesController.text,
+                                'joiningDate': DateFormat("dd MMMM yyyy")
+                                    .format(_dateRange[0]!),
+                                'contactNumber': numberController.text,
+                                'teacherId': teacher.uid,
+                                'imageId': 'null',
+                              };
+                              List<String> s = teacher.students!;
+                              s.insert(teacher.students!.length, uid);
+                              Map<String, dynamic> data1 = {
+                                'students': s,
+                              };
+                              // ignore: use_build_context_synchronously
+                              await AuthServices.createStudent(data, context);
+                              await UserServices.updateTeacherData(
+                                data1,
+                                teacher.uid!,
+                              );
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              showErrorNoti(
+                                  context, 'Error', 'please fill all fields');
+                            }
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            showErrorNoti(context, 'Error',
+                                'this name student already exists');
+                          }
+                        }
+                        await getData();
+                        setState(() {
+                          isButtonLoading = false;
+                        });
+                        // ignore: use_build_context_synchronously
+                        // Navigator.pushReplacement(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const LandingScreen(),
+                        //   ),
+                        // );
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          BrandColors.darkBlueColor,
+                        ),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        widget.isEdit ? "Edit" : 'ADD',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontFamily: "Work Sans",
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                child: Text(
-                  widget.isEdit ? "Edit" : 'ADD',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontFamily: "Work Sans",
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(
               height: 24,
             ),

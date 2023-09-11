@@ -1,5 +1,6 @@
 import 'package:attendenceapp/screens/home/all_days.dart';
 import 'package:attendenceapp/screens/home/one_day_detail.dart';
+import 'package:attendenceapp/services/user_services.dart';
 import 'package:attendenceapp/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,12 +13,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<DateTime> listofDays = [
+    DateTime.now(),
+    DateTime.now().subtract(const Duration(days: 1)),
+    DateTime.now().subtract(const Duration(days: 2)),
+    DateTime.now().subtract(const Duration(days: 3)),
+    DateTime.now().subtract(const Duration(days: 4)),
+    DateTime.now().subtract(const Duration(days: 5)),
+    DateTime.now().subtract(const Duration(days: 6)),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: BrandColors.appBackColor,
       appBar: AppBar(
+        leading: const SizedBox(
+          width: 0,
+          height: 0,
+        ),
+        leadingWidth: 0,
+        titleSpacing: 0,
         backgroundColor: BrandColors.whiteColor,
         title: Row(
           children: [
@@ -116,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderRadius: BorderRadius.circular(4),
                             color: BrandColors.greenColor,
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               'Present Students: 40',
                               style: TextStyle(
@@ -225,16 +242,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: size.height / 50,
               ),
               ListView.builder(
-                  itemCount: 7,
+                  itemCount: listofDays.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, child) {
+                  itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const OneDayDetail(),
+                            builder: (context) => OneDayDetail(
+                              date: DateFormat("dd-MMMM-yyyy")
+                                  .format(listofDays[index]),
+                            ),
                           ),
                         );
                       },
@@ -267,9 +287,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      '22 August 2023',
-                                      style: TextStyle(
+                                    Text(
+                                      DateFormat("dd-MMMM-yyyy")
+                                          .format(listofDays[index]),
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontFamily: "Work Sans",
                                         fontWeight: FontWeight.w600,

@@ -173,7 +173,7 @@ class _ProfileState extends State<Profile> {
                         ),
                         InkWell(
                           onTap: () {
-                            print(teacher.imageId);
+                            print(teacher.students![1]);
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(

@@ -14,7 +14,8 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   bool showPassword = false;
   bool isLoading = false;
-  TextEditingController userController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
@@ -72,7 +73,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       height: size.height / 40,
                     ),
                     const Text(
-                      'Username',
+                      'First Name',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -103,13 +104,64 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           Expanded(
                             child: TextFormField(
-                              controller: userController,
+                              controller: firstNameController,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
                               decoration: const InputDecoration(
-                                hintText: 'Enter username...',
+                                hintText: 'Enter firstname...',
+                                enabledBorder: InputBorder.none,
+                                border: InputBorder.none,
+                              ),
+                              keyboardType: TextInputType.text,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height / 50,
+                    ),
+                    const Text(
+                      'Last Name',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Work Sans",
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height / 50,
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.width / 40),
+                      width: size.width,
+                      height: size.height / 13,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: BrandColors.greyColor),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.person,
+                            color: BrandColors.greyColor,
+                          ),
+                          SizedBox(
+                            width: size.width / 40,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              controller: lastNameController,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: 'Enter last name...',
                                 enabledBorder: InputBorder.none,
                                 border: InputBorder.none,
                               ),
@@ -259,43 +311,57 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   isLoading = true;
                                 });
 
-                                String username = userController.text;
+                                String firstName = firstNameController.text;
+                                String lastName = lastNameController.text;
                                 String email = emailController.text;
                                 String password = passwordController.text;
 
-                                if (username.length >= 6 &&
-                                    password.length >= 6) {
-                                  if (RegExp(
-                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                      .hasMatch(email)) {
-                                  } else {
-                                    showAlert(size, BrandColors.redColor,
-                                        context, 'email is invalid');
-                                  }
-                                  bool status = await AuthServices.createUser(
-                                      username, email, password);
-                                  if (status) {
-                                    // ignore: use_build_context_synchronously
-                                    showAlert(size, BrandColors.darkBlueColor,
-                                        context, 'Sign up done');
-                                    // ignore: use_build_context_synchronously
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LandingScreen(),
-                                        ),
-                                        (route) => false);
-                                  } else {
-                                    // ignore: use_build_context_synchronously
-                                    showAlert(size, BrandColors.redColor,
-                                        context, 'Sign up failed');
-                                  }
-                                } else {
-                                  showAlert(size, BrandColors.redColor, context,
-                                      'username and password length should be greater than 6');
-                                }
+                                Map<String, dynamic> data = {
+                                  "first_name": firstName,
+                                  "last_name": lastName,
+                                  "email": email,
+                                  "password": password,
+                                  "role":
+                                      "38d5636a-8b78-474d-afc9-f66b544e1b1a",
+                                };
 
+                                await AuthServices.serverSignUp(data, context);
+
+                                // if (username.length >= 6 &&
+                                //     password.length >= 6) {
+                                //   if (RegExp(
+                                //           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                //       .hasMatch(email)) {
+                                //   } else {
+                                //     showAlert(BrandColors.redColor, context,
+                                //         'email is invalid');
+                                //   }
+                                // bool status = await AuthServices.createUser(
+                                //     username, email, password);
+                                //   bool status = true;
+                                //   if (status) {
+                                //     // ignore: use_build_context_synchronously
+                                //     showAlert(size, BrandColors.darkBlueColor,
+                                //         context, 'Sign up done');
+                                //     // ignore: use_build_context_synchronously
+                                //     Navigator.pushAndRemoveUntil(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               const LandingScreen(),
+                                //         ),
+                                //         (route) => false);
+                                //   } else {
+                                //     // ignore: use_build_context_synchronously
+                                //     showAlert(size, BrandColors.redColor,
+                                //         context, 'Sign up failed');
+                                //   }
+                                // } else {
+                                //   showAlert(size, BrandColors.redColor, context,
+                                //       'username and password length should be greater than 6');
+                                // }
+
+                                // }
                                 setState(() {
                                   isLoading = false;
                                 });

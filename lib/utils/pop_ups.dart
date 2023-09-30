@@ -253,17 +253,18 @@ Future showSignOutPopUp(BuildContext context) {
                     Expanded(
                       child: InkWell(
                         onTap: () async {
-                          await AuthServices.logout();
+                          await AuthServices.logOut(context);
+                          // await AuthServices.logout();
                           // ignore: use_build_context_synchronously
-                          showSuccessNoti(
-                              context, 'Authentication', 'Logout successfully');
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const WelcomeScreen(),
-                              ),
-                              (route) => false);
+                          // showSuccessNoti(
+                          //     context, 'Authentication', 'Logout successfully');
+                          // // ignore: use_build_context_synchronously
+                          // Navigator.pushAndRemoveUntil(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => const WelcomeScreen(),
+                          //     ),
+                          //     (route) => false);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(

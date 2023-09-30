@@ -40,7 +40,7 @@ class _EditProfileState extends State<EditProfile> {
     });
     String id = await UserServices.getCurrentTeacherId();
     teacher = await UserServices.fetchTeacherById(id);
-    usernameController.text = teacher.username!;
+    usernameController.text = teacher.firstName!;
     emailController.text = teacher.email!;
     setState(() {
       isLoading = false;
@@ -73,7 +73,7 @@ class _EditProfileState extends State<EditProfile> {
       isImageLoading = true;
     });
     Reference ref =
-        FirebaseStorage.instance.ref().child("/teacher").child(teacher.uid!);
+        FirebaseStorage.instance.ref().child("/teacher").child(teacher.id!);
 
     await ref.putFile(image!);
 
@@ -84,8 +84,8 @@ class _EditProfileState extends State<EditProfile> {
     Map<String, dynamic> data = {
       'imageId': downloadUrl,
     };
-    bool status = await UserServices.updateTeacherData(data, teacher.uid!);
-    teacher = await UserServices.fetchTeacherById(teacher.uid!);
+    bool status = await UserServices.updateTeacherData(data, teacher.id!);
+    teacher = await UserServices.fetchTeacherById(teacher.id!);
     if (status) {
       // ignore: use_build_context_synchronously
       showSuccessNoti(context, 'Image', 'image is uploaded successfully');
@@ -146,12 +146,12 @@ class _EditProfileState extends State<EditProfile> {
                                   ),
                                 ),
                               )
-                            : teacher.imageId == "null"
+                            : teacher.avatar == "null"
                                 ? Image.asset('assets/images/profile.png')
                                 : CircleAvatar(
                                     radius: 70,
                                     backgroundImage: NetworkImage(
-                                      teacher.imageId!,
+                                      teacher.avatar!,
                                       scale: 1,
                                     ),
                                   ),
@@ -299,7 +299,7 @@ class _EditProfileState extends State<EditProfile> {
                                   'username': usernameController.text,
                                 };
                                 await UserServices.updateTeacherData(
-                                    data, teacher.uid!);
+                                    data, teacher.id!);
                                 // ignore: use_build_context_synchronously
                                 showSuccessNoti(context, 'Profile',
                                     'Profile Data updated successfully');

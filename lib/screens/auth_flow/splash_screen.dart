@@ -1,9 +1,9 @@
 import 'package:attendenceapp/screens/auth_flow/welcome_screen.dart';
 import 'package:attendenceapp/screens/home/landing_screen.dart';
+import 'package:attendenceapp/services/base_services.dart';
 import 'package:attendenceapp/utils/colors.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,38 +16,33 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Future.delayed(const Duration(seconds: 3)).then((value) {
-    //   Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => const WelcomeScreen(),
-    //       ));
-    // });
     fetchUser();
   }
 
   fetchUser() async {
-    User? user = await FirebaseAuth.instance.currentUser;
-    if (kDebugMode) {
-      print(user?.uid.toString());
+    await Future.delayed(
+      const Duration(seconds: 2),
+    );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    bool? isLogin = prefs.getBool('isLogin') ?? false;
+    if (!isLogin) {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (ctx) => const WelcomeScreen(),
+        ),
+      );
+    } else {
+      await BaseService.getSavedAuth();
+      await BaseService.refreshAuth(force: true);
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (ctx) => const LandingScreen(),
+        ),
+      );
     }
-    Future.delayed(const Duration(seconds: 3)).then((value) {
-      if (user?.uid.toString() == null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const WelcomeScreen(),
-          ),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LandingScreen(),
-          ),
-        );
-      }
-    });
   }
 
   @override

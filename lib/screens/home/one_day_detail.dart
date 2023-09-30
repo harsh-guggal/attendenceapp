@@ -142,7 +142,7 @@ class _OneDayDetailState extends State<OneDayDetail> {
                                               Expanded(
                                                 child: Text(
                                                   listOfStudents[index].name!,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontSize: 16,
                                                     fontFamily: "Work Sans",
                                                     fontWeight: FontWeight.w600,

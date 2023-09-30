@@ -1,7 +1,7 @@
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:flutter/material.dart';
 
-void showAlert(Size size, Color color, BuildContext context, String msg) {
+void showAlert(Color color, BuildContext context, String msg) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

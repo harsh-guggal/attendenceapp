@@ -34,7 +34,7 @@ class _MarkAttendenceScreenState extends State<MarkAttendenceScreen> {
     });
     String id = await UserServices.getCurrentTeacherId();
     teacher = await UserServices.fetchTeacherById(id);
-    list = await UserServices.fetchOneTeacherAllStudents(teacher.uid!);
+    list = await UserServices.fetchOneTeacherAllStudents(teacher.id!);
     isCreated = await UserServices.isDateDocCreated(widget.date);
     print(isCreated);
     print(widget.date);
@@ -305,7 +305,7 @@ class _MarkAttendenceScreenState extends State<MarkAttendenceScreen> {
                             print('--------not created--------------');
                             Map<String, dynamic> data = {
                               'date': widget.date,
-                              'teacherId': teacher.uid,
+                              'teacherId': teacher.id,
                               'attendance': [
                                 {
                                   'status': reason,
@@ -333,7 +333,7 @@ class _MarkAttendenceScreenState extends State<MarkAttendenceScreen> {
                             });
                             Map<String, dynamic> data = {
                               'date': widget.date,
-                              'teacherId': teacher.uid,
+                              'teacherId': teacher.id,
                               'attendance': l,
                             };
                             await UserServices.updateAttendance(data);

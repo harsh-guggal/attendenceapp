@@ -1,6 +1,8 @@
 import 'package:attendenceapp/models/teacher_model.dart';
 import 'package:attendenceapp/screens/home/add_student.dart';
 import 'package:attendenceapp/screens/home/edit_profile.dart';
+import 'package:attendenceapp/services/auth_services.dart';
+import 'package:attendenceapp/services/base_services.dart';
 import 'package:attendenceapp/services/user_services.dart';
 import 'package:attendenceapp/utils/colors.dart';
 import 'package:attendenceapp/utils/pop_ups.dart';
@@ -27,8 +29,8 @@ class _ProfileState extends State<Profile> {
     setState(() {
       isLoading = true;
     });
-    String id = await UserServices.getCurrentTeacherId();
-    teacher = await UserServices.fetchTeacherById(id);
+    // String id = await UserServices.getCurrentTeacherId();
+    teacher = (await BaseService.getCurrentUser())!;
     setState(() {
       isLoading = false;
     });
@@ -70,12 +72,12 @@ class _ProfileState extends State<Profile> {
                     ),
                     child: Column(
                       children: [
-                        teacher.imageId == "null"
+                        teacher.avatar == null
                             ? Image.asset('assets/images/profile.png')
                             : CircleAvatar(
                                 radius: 60,
                                 backgroundImage: NetworkImage(
-                                  teacher.imageId!,
+                                  teacher.avatar!,
                                   scale: 2,
                                 ),
                               ),
@@ -83,7 +85,7 @@ class _ProfileState extends State<Profile> {
                           height: 8,
                         ),
                         Text(
-                          teacher.username!,
+                          teacher.firstName!,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -173,7 +175,7 @@ class _ProfileState extends State<Profile> {
                         ),
                         InkWell(
                           onTap: () {
-                            print(teacher.students![1]);
+                            // print(teacher.students![1]);
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(

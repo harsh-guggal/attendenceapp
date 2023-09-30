@@ -431,20 +431,20 @@ class _AddStudentState extends State<AddStudent> {
                                 'joiningDate': DateFormat("dd MMMM yyyy")
                                     .format(_dateRange[0]!),
                                 'contactNumber': numberController.text,
-                                'teacherId': teacher.uid,
+                                'teacherId': teacher.id,
                                 'imageId': 'null',
                               };
-                              List<String> s = teacher.students!;
-                              s.insert(teacher.students!.length, uid);
-                              Map<String, dynamic> data1 = {
-                                'students': s,
-                              };
+                              // List<String> s = teacher.students!;
+                              // s.insert(teacher.students!.length, uid);
+                              // Map<String, dynamic> data1 = {
+                              //   'students': s,
+                              // };
                               // ignore: use_build_context_synchronously
-                              await AuthServices.createStudent(data, context);
-                              await UserServices.updateTeacherData(
-                                data1,
-                                teacher.uid!,
-                              );
+                              // await AuthServices.createStudent(data, context);
+                              // await UserServices.updateTeacherData(
+                              //   data1,
+                              //   teacher.uid!,
+                              // );
                             } else {
                               // ignore: use_build_context_synchronously
                               showErrorNoti(

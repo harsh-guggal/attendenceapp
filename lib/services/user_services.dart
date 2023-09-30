@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:attendenceapp/models/attendence_model.dart';
 import 'package:attendenceapp/models/student_model.dart';
 import 'package:attendenceapp/models/teacher_model.dart';
+import 'package:attendenceapp/services/base_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class UserServices {
   static dynamic getCurrentTeacherId() async {
-    User? user = await FirebaseAuth.instance.currentUser;
+    User? user = FirebaseAuth.instance.currentUser;
     return user!.uid;
   }
 
@@ -61,10 +65,10 @@ class UserServices {
   static Future<dynamic> fetchOneTeacherAllStudents(String id) async {
     List<Student> listOfStudents = [];
     var teacher = await fetchTeacherById(id);
-    for (int i = 0; i < teacher.students!.length; i++) {
-      var student = await fetchStudentById(teacher.students![i]);
-      listOfStudents.insert(i, student);
-    }
+    // for (int i = 0; i < teacher.students!.length; i++) {
+    //   var student = await fetchStudentById(teacher.students![i]);
+    //   listOfStudents.insert(i, student);
+    // }
     return listOfStudents;
   }
 
@@ -173,5 +177,34 @@ class UserServices {
       }
     }
     return leave;
+  }
+
+//
+
+  static Future<Teacher?> fetchUserByEmail(String email) async {
+    dynamic response = await BaseService.makeUnauthenticatedRequest(
+      "${BaseService.BASE_URL}/users/?filter[email][_eq]=$email",
+    );
+
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(response.body);
+      if (responseBody['data'].length > 0) {
+        if (kDebugMode) {
+          print("Fetched user: ${responseBody['data'][0]}");
+        }
+        try {
+          return Teacher.fromJson(responseBody['data'][0]);
+        } catch (e) {
+          if (kDebugMode) {
+            print("Error fetching user: $e");
+          }
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
   }
 }

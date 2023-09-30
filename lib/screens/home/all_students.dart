@@ -25,7 +25,7 @@ class _AllStudentsState extends State<AllStudents> {
     });
     String id = await UserServices.getCurrentTeacherId();
     teacher = await UserServices.fetchTeacherById(id);
-    list = await UserServices.fetchOneTeacherAllStudents(teacher.uid!);
+    list = await UserServices.fetchOneTeacherAllStudents(teacher.id!);
     setState(() {
       isLoading = false;
     });

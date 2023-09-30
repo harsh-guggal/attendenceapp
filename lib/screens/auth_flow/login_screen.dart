@@ -207,26 +207,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isLoading = true;
                                 });
 
-                                bool status = await AuthServices.loginUser(
+                                // bool status = await AuthServices.loginUser(
+                                //     emailController.text,
+                                //     passwordController.text);
+                                // if (true) {
+                                //   // ignore: use_build_context_synchronously
+                                //   showAlert(size, BrandColors.darkBlueColor,
+                                //       context, 'Login Successfull');
+                                //   // ignore: use_build_context_synchronously
+                                //   Navigator.pushAndRemoveUntil(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             const LandingScreen(),
+                                //       ),
+                                //       (route) => false);
+                                // } else {
+                                //   // ignore: use_build_context_synchronously
+                                //   showAlert(size, BrandColors.redColor, context,
+                                //       'Login Failed');
+                                // }
+
+                                await AuthServices.serverSignIn(
                                     emailController.text,
-                                    passwordController.text);
-                                if (status) {
-                                  // ignore: use_build_context_synchronously
-                                  showAlert(size, BrandColors.darkBlueColor,
-                                      context, 'Login Successfull');
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LandingScreen(),
-                                      ),
-                                      (route) => false);
-                                } else {
-                                  // ignore: use_build_context_synchronously
-                                  showAlert(size, BrandColors.redColor, context,
-                                      'Login Failed');
-                                }
+                                    passwordController.text,
+                                    context);
 
                                 setState(() {
                                   isLoading = false;

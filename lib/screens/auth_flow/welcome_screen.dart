@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:attendenceapp/screens/auth_flow/login_screen.dart';
 import 'package:attendenceapp/screens/auth_flow/registration_screen.dart';
 import 'package:attendenceapp/utils/colors.dart';
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -88,7 +92,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 horizontal: size.width / 10,
               ),
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  // print('api called --------------->');
+                  // String uri = "http://10.0.2.2:8055/items/student";
+                  // print(uri);
+                  // Response response = await get(Uri.parse(uri));
+                  // print('response is -------------->');
+                  // print(response);
+                  // Map data = await jsonDecode(response.body);
+                  // print('api data --------------->');
+                  // print(data);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
